@@ -1,82 +1,108 @@
-import mybalance
-import mywithdrawal
-import mydeposit
-import mybills
-import myexit
+from deposit import deposits
+import balance
+from withdraw import withdrawl
+import bill
 
-initial_balance = 0
+init_balance = 0
+acc_balance = 0
+new_withdrawal = 0
+real_balance = 0
+new_deposit = 0
+users = {'IMONIDE PRECIOUS': '1234', 'JANE JAMES': '5566', 'ABBY WHITE': '4980'}
 a = 0
 while a != 3:
+    try:
+        pin = input("please input your pin: ")
 
-    pin = int(input("please enter your pin: "))
-    if pin == 1234:
-        print("welcome class")
-        print("1 for balance \n"
-              "2 for withdrawal \n"
-              "3 pay bills \n"
-              "4 deposit \n"
-              "5 exit")
+        for x, y in users.items():
+            if y == pin:
+                print(f'welcome to our app {x}')
+                break
+            else:
+                print("Wrong Password")
         break
-    else:
-        print("invalid pin")
+    except:
+        print("invalid input try again")
 
-    retry_pin = input("do you want to try again (Y or N)".lower())
 
-    if retry_pin == "yes" or "y":
+    again = input("do you want to try again? ")
+    aga_in = again.lower()
 
+    if aga_in == "y" or "yes" :
 
         if a == 0:
-            print("you have 2 trials left")
+            print("you have 2 trial left")
 
-        if a == 1:
+        elif a == 1:
             print("you have 1 trial left")
 
-        if a == 2:
+        elif a == 2:
             print("you have been blocked")
-        break
+            break
 
-a = a + 1
+    a += 1
 
-b = "yes" or "y"
-while b == "yes" or "y":
-# stage 2 menu
-    choice = int(input("choose option: "))
-# call balance function
-    if choice == 1:
-        mybalance.balance(initial_balance)
+
+
+
+
+i = "y" or "yes"
+while i == "y" or "yes":
+    print("choose your operation \n"
+          "1 for balance \n"
+          "2 for Withdrawal \n"
+          "3 for Deposit \n"
+          "4 for pay utility \n")
+
+
+    choice = int(input())
+
 # call withdrawal function
     if choice == 2:
-        amount = int(input("enter amount: "))
-        if amount > initial_balance:
-            print("insufficient fund")
+        if init_balance < 1:
+            print("your balance is too low to withdraw, pls deposit first")
+
         else:
-            initial_balance = mywithdrawal.withdraw(initial_balance,amount)
+            new_withdrawal = int(input("how much do you want to withdraw: "))
+            init_balance = withdrawl(init_balance, new_withdrawal)
+
 # call deposit function
-    if choice == 4:
-        depo = int(input("enter deposit amount: "))
-        initial_balance = mydeposit.deposit(initial_balance,depo)
-# call bill function
     if choice == 3:
-        mybills.bills()
-        bill_option = int(input("enter option: "))
-        bill_amount = int(input("enter bill amount"))
-        if bill_amount > initial_balance:
-            print("insufficient funds")
+
+        new_deposit = int(input("how much do you want to deposit: "))
+
+        init_balance = deposits(init_balance, new_deposit, new_withdrawal)
+        #init_balance = deposits(init_balance, new_deposit, new_withdrawal)
+        # print("this is real balance:", real_balance)
+
+# call balance function
+    if choice == 1:
+        if init_balance < 1:
+            print("your balance is too low please deposit")
+            balance.balances(init_balance)
         else:
+            balance.balances(init_balance)
+            #real_balance = balance.balances(init_balance, new_deposit, new_withdrawal)
 
-            mybills.calc_bill(initial_balance,bill_amount)
+# call function to pay bill
+    if choice == 4:
+        if init_balance < 1:
+            print("Your balance is too low to pay bills please deposit")
+        else:
+            bill.paybill()
+            bill_choice = int(input())
+            bill.electric_bill(bill_choice)
+            elect_choice = int(input())
+            bill.benin_bill(elect_choice)
+            pay = int(input())
+            cust_num = float(input("customer number "))
+            pin = int(input("input pint to pay "))
+            bill.pin_verification(pin)
+            bill.bill_pay(init_balance, pay)
 
-    if choice >= 5 :
-        myexit.exitapp()
+    if choice > 4:
+        print("invalid option")
 
 
-    b = input("do you want to perform another transaction ".lower())
-    if b == "yes" or "y":
-
-        print("1 for balance \n"
-                  "2 for withdrawal \n"
-                  "3 pay bills \n"
-                  "4 deposit \n"
-                  "5 exit")
-
-
+    a = str(input("do you want to perform another transaction?: Y or N: "))
+    i = a.lower()
